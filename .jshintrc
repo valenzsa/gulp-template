@@ -1,0 +1,39 @@
+{
+    "curly": true,
+    "forin": true,
+    "freeze": true,
+    "latedef": "nofunc",
+    "nonbsp": true,
+    "nonew": true,
+    "plusplus": false,
+    "undef": false,
+    "unused": false,
+    "strict": false,
+
+    "asi": false,
+    "boss": false,
+    "debug": false,
+    "eqnull": true,
+    "evil": false,
+    "expr": false,
+    "funcscope": false,
+    "iterator": false,
+    "lastsemic": false,
+    "loopfunc": true,
+    "maxerr": 50,
+    "moz": false,
+    "notypeof": false,
+    "proto": false,
+    "scripturl": false,
+    "shadow": false,
+    "supernew": false,
+    "validthis": false,
+    "noyield": false,
+
+    "browser": true,
+    "node": true,
+
+    "globals": {
+        "angular": false
+    }
+}
