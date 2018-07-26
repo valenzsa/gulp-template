@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Gulp Test</title>
-    <!-- partial:_partials/_global-css.html --><!-- partial -->
+    <!-- partial:_partials/_global-css.html -->
+    <!-- partial -->
+    <style>
+        .mystyle {
+            display: block;
+            z-index: 100;
+        }
+        .mystyle,
+        .yourstyle {
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
     <h1>testing gulp</h1>
     <script src="/js/gulp.js"></script>
+    <script>
+    function isNullOrEmpty(val) {
+        if (val == undefined || val == null || $.trim(val).length <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    </script>
 </body>
+
 </html>

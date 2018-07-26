@@ -181,7 +181,11 @@ gulp.task('compile-html', ['clean-html'], function() {
     return gulp.src(config.src.html)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.injectPartials({ removeTags: true }))
-        .pipe($.if(args.min, $.htmlmin({collapseWhitespace: true})))
+        .pipe($.if(args.min, $.htmlmin({
+            collapseWhitespace: true,
+            minifyCSS: true,
+            minifyJS: true
+        })))
         .pipe(gulp.dest(config.dest.html));
 });
 
