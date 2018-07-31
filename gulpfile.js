@@ -93,7 +93,7 @@ gulp.task('compile-js', ['clean-js', 'lint-js'], function() {
         .pipe($.sourcemaps.init())
         .pipe($.concat(config.projectName + '.js'))
         .pipe($.if(args.min, $.uglify()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.js));
 });
 
@@ -103,7 +103,7 @@ gulp.task('compile-js-separate', ['clean-js', 'lint-js'], function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.if(args.min, $.uglify()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.js));
 });
 
@@ -136,7 +136,7 @@ gulp.task('compile-styles', ['clean-styles'], function() {
         .pipe($.concat(config.projectName + '.css'))
         .pipe($.postcss([autoprefixer()]))
         .pipe($.if(args.min, $.csso()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
 
@@ -149,7 +149,7 @@ gulp.task('compile-less', function() {
         .pipe($.less())
         .pipe($.postcss([autoprefixer()]))
         .pipe($.if(args.min, $.csso()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
 
@@ -161,7 +161,7 @@ gulp.task('compile-sass', function() {
         .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
         .pipe($.postcss([autoprefixer()]))
         .pipe($.if(args.min, $.csso()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
 
@@ -172,7 +172,7 @@ gulp.task('compile-css', function() {
         .pipe($.sourcemaps.init())
         .pipe($.postcss([autoprefixer()]))
         .pipe($.if(args.min, $.csso()))
-        .pipe($.sourcemaps.write())
+        .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
 
