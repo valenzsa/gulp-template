@@ -8,6 +8,7 @@ var browserSync = require('browser-sync');
 var deleteEmpty = require('delete-empty');
 var ftp = require( 'vinyl-ftp' );
 var autoprefixer = require('autoprefixer');
+var discardComments = require('postcss-discard-comments');
 
 var $ = require('gulp-load-plugins')({lazy: true}); // loads plugins automatically when needed with $.
 
@@ -134,7 +135,7 @@ gulp.task('compile-styles', ['clean-styles'], function() {
     log('Merging LESS, SASS, CSS');
     return merge2(LESS, SASS, srcCSS)
         .pipe($.concat(config.projectName + '.css'))
-        .pipe($.postcss([autoprefixer()]))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -147,7 +148,7 @@ gulp.task('compile-less', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.less())
-        .pipe($.postcss([autoprefixer()]))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -159,7 +160,7 @@ gulp.task('compile-sass', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
-        .pipe($.postcss([autoprefixer()]))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -170,7 +171,7 @@ gulp.task('compile-css', function() {
     return gulp.src(config.src.css)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
-        .pipe($.postcss([autoprefixer()]))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -184,7 +185,8 @@ gulp.task('compile-html', ['clean-html'], function() {
         .pipe($.if(args.min, $.htmlmin({
             collapseWhitespace: true,
             minifyCSS: true,
-            minifyJS: true
+            minifyJS: true,
+            removeComments: true
         })))
         .pipe(gulp.dest(config.dest.html));
 });
