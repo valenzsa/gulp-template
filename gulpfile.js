@@ -135,7 +135,7 @@ gulp.task('compile-styles', ['clean-styles'], function() {
     log('Merging LESS, SASS, CSS');
     return merge2(LESS, SASS, srcCSS)
         .pipe($.concat(config.projectName + '.css'))
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -148,7 +148,7 @@ gulp.task('compile-less', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.less())
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -160,7 +160,7 @@ gulp.task('compile-sass', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
@@ -171,7 +171,7 @@ gulp.task('compile-css', function() {
     return gulp.src(config.src.css)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments()]), $.postcss([autoprefixer()])))
+        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
         .pipe($.if(args.min, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
