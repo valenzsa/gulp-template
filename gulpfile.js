@@ -344,34 +344,6 @@ function startProdFTP() {
     return connection;
 }
 
-function startBrowserSync() {
-    if (browserSync.active) {
-        return;
-    }
-
-    log('Starting Browser-sync on port ' + config.port);
-
-    var options = {
-        //proxy: 'localhost:' + config.port,
-        port: config.port,
-        files: [
-            config.dest.root + '**/*.*'
-        ],
-        ghostMode: {
-            clicks: true,
-            location: false,
-            forms: true,
-            scroll: true
-        },
-        injectChanges: true,
-        logFileChanges: true,
-        logLevel: 'debug',
-        logPrefix: 'gulp-patterns',
-        notify: true,
-        reloadDelay: 1000
-    };
-}
-
 function clean(path) {
     log('Cleaning: ' + $.util.colors.blue(path));
     return del.sync(path);
