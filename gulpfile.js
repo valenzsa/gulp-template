@@ -9,6 +9,7 @@ var deleteEmpty = require('delete-empty');
 var ftp = require( 'vinyl-ftp' );
 var autoprefixer = require('autoprefixer');
 var discardComments = require('postcss-discard-comments');
+var critical = require('critical').stream;
 
 var $ = require('gulp-load-plugins')({lazy: true}); // loads plugins automatically when needed with $.
 
@@ -66,7 +67,7 @@ gulp.task('clean', ['clean-styles', 'clean-js', 'clean-html'], function() { // O
     deleteEmpty.sync(config.dest.root);
 });
 gulp.task('clean-all', function() {clean(config.dest.root);});
-gulp.task('build', ['clean', 'compile-styles', 'compile-html', 'compile-js', 'compile-images', 'compile-docs', 'compile-fonts']);
+gulp.task('build', ['clean', 'criticalCSS', 'compile-js', 'compile-images', 'compile-docs', 'compile-fonts']);
 gulp.task('serve', ['build', 'less-watcher', 'sass-watcher', 'css-watcher', 'html-watcher', 'html-partials-watcher', 'js-watcher', 'images-watcher', 'docs-watcher', 'fonts-watcher', 'start-browsersync']);
 gulp.task('watch', ['build', 'less-watcher', 'sass-watcher', 'css-watcher', 'html-watcher', 'js-watcher', 'images-watcher', 'docs-watcher', 'fonts-watcher']);
 gulp.task('deploy', ['ftp-files']);
@@ -214,6 +215,28 @@ gulp.task('compile-fonts', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.newer(config.dest.fonts))
         .pipe(gulp.dest(config.dest.fonts));
+});
+
+gulp.task('criticalCSS', ['compile-html', 'compile-styles'], function() {
+    return gulp.src(config.dest.root + '*.html')
+    .pipe(critical({
+        base: config.dest.root,
+        inline: true, 
+        css: config.dest.css + config.projectName + '.css',
+        dimensions: [{
+            width: 320,
+            height: 480
+            },{
+            width: 768,
+            height: 1024
+            },{
+            width: 1280,
+            height: 960
+            }],
+        ignore: ['font-face']
+    }))
+    .on('error', function(err) { log(err.message); })
+    .pipe(gulp.dest(config.dest.root));
 });
 
 // ----------------------- CLEANING TASKS
