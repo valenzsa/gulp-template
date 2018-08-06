@@ -48,13 +48,13 @@ gulp.task('help', $.taskListing);
  * 
  * gulp clean: clean the (dest)ination folder of files that will be built.
  * gulp clean-all: delete the (dest)ination folder.
- * gulp build [--min, --list]: clean, then compile and move from the (src) folder
- * gulp serve [--min, --list]: clean, then build, then watch the source files and start browsersync to view and live-edit the source
- * gulp watch [--min, --list]: clean, then build, then watch the source files to keep the app folder updated without starting browsersync
+ * gulp build [--nomin, --list]: clean, then compile and move from the (src) folder
+ * gulp serve [--nomin, --list]: clean, then build, then watch the source files and start browsersync to view and live-edit the source
+ * gulp watch [--nomin, --list]: clean, then build, then watch the source files to keep the app folder updated without starting browsersync
  * gulp deploy [--staging or --production]: Deploy files via FTP from (dest)ination folder to --staging or --production. Define FTP settings in gulp.config.js
  * 
  * Options:
- * 1) --min: minify the html, css, and js
+ * 1) --nomin: do not minify the html, css, and js
  * 2) --list: list affected files
  * 3) Build task: Changing 'compile-styles' to 'compile-styles-separate' will compile each SASS, LESS, and CSS file separately and keep their filename changing the extension to .css
  *    With this option, be sure to use different filenames for .less .sass .scss and .css OR THEY WILL BE OVERWRITTEN IN THE APP FOLDER. You can also change 'compile-js' to 'compile-js-separate'
@@ -94,7 +94,7 @@ gulp.task('compile-js', ['clean-js', 'lint-js'], function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.concat(config.projectName + '.js'))
-        .pipe($.if(args.min, $.uglify()))
+        .pipe($.if(!args.nomin, $.uglify()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.js));
 });
@@ -104,7 +104,7 @@ gulp.task('compile-js-separate', ['clean-js', 'lint-js'], function() {
     return gulp.src(config.src.js)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
-        .pipe($.if(args.min, $.uglify()))
+        .pipe($.if(!args.nomin, $.uglify()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.js));
 });
@@ -136,8 +136,8 @@ gulp.task('compile-styles', ['clean-styles'], function() {
     log('Merging LESS, SASS, CSS');
     return merge2(LESS, SASS, srcCSS)
         .pipe($.concat(config.projectName + '.css'))
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
-        .pipe($.if(args.min, $.csso()))
+        .pipe($.if(!args.nomin, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
+        .pipe($.if(!args.nomin, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
@@ -149,8 +149,8 @@ gulp.task('compile-less', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.less())
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
-        .pipe($.if(args.min, $.csso()))
+        .pipe($.if(!args.nomin, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
+        .pipe($.if(!args.nomin, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
@@ -161,8 +161,8 @@ gulp.task('compile-sass', function() {
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
         .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
-        .pipe($.if(args.min, $.csso()))
+        .pipe($.if(!args.nomin, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
+        .pipe($.if(!args.nomin, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
@@ -172,8 +172,8 @@ gulp.task('compile-css', function() {
     return gulp.src(config.src.css)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.sourcemaps.init())
-        .pipe($.if(args.min, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
-        .pipe($.if(args.min, $.csso()))
+        .pipe($.if(!args.nomin, $.postcss([autoprefixer(), discardComments({removeAll: true})]), $.postcss([autoprefixer()])))
+        .pipe($.if(!args.nomin, $.csso()))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.css));
 });
@@ -183,7 +183,7 @@ gulp.task('compile-html', ['clean-html'], function() {
     return gulp.src(config.src.html)
         .pipe($.if(args.list, gulpPrint())) // if --list then gulpprint() (list files)
         .pipe($.injectPartials({ removeTags: true }))
-        .pipe($.if(args.min, $.htmlmin({
+        .pipe($.if(!args.nomin, $.htmlmin({
             collapseWhitespace: true,
             minifyCSS: true,
             minifyJS: true,
