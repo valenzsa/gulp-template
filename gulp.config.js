@@ -20,7 +20,7 @@ module.exports = function() {
      * 
      * 
      */
-    var projectName = 'gulp';
+    var projectName = 'superhero';
     var sourceFolder = 'src';
     var htmlPartialsFolder = '_partials';
     var destFolder = 'app';

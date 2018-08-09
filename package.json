@@ -1,8 +1,8 @@
 {
-  "name": "gulp-template",
+  "name": "alcon",
   "version": "1.0.0",
-  "description": "gulp template",
-  "main": "gulpfile.js",
+  "description": "Create Your Own United Way Superhero",
+  "main": "index.js",
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^9.0.1",
@@ -41,15 +41,19 @@
     "yargs": "^12.0.1"
   },
   "scripts": {
-    "test": "hello-world"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "gulp-template"
+    "url": "git+Z:/Clients/Alcon/superheroes.git"
   },
+  "bugs": {
+    "url": "Z:/Clients/Alcon/superheroes/issues"
+  },
+  "homepage": "Z:/Clients/Alcon/superheroes#readme",
   "keywords": [
-    "gulp"
+    "Superhero"
   ],
-  "author": "erik stagg",
+  "author": "The SPI Group, LLC",
   "license": "ISC"
 }
